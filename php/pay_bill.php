@@ -52,37 +52,80 @@
 
   <!-- ======= Main ======= -->
   <main id="main" class="main">
-	  
+	           
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Terms & Conditions</h5>
-
-              <!-- Default Tabs -->
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Terms</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Conditions</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Data Policy</button>
-                </li>
-              </ul>
-              <div class="tab-content pt-2" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                  Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.
+              <h5 class="card-title">Electricity Bill Payment</h5>
+              
+              <!-- Custom Styled Validation -->
+              <form method="post" class="row g-3 needs-validation" novalidate>
+				  
+				<div class="col-md-12">
+                  <label for="network" class="form-label">Select Disco Name:</label>
+                  <select name="network" class="form-select" id="network" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option value="ikeja-electric">Ikeja Electric</option>
+                            <option value="eko-electric">Eko Electric</option>
+                            <option value="abuja-electric">Abuja Electric</option>
+                            <option value="kano-electric">Kano Electric</option>
+                            <option value="portharcourt-electric">Port Harcout Electric</option>
+                            <option value="ibadan-electric">Ibadan Electric</option>
+                            <option value="kaduna-electric">Kaduna Electric</option>
+                            <option value="jos-electric">Jos Electric</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a network.</div>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                  Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+				  
+				 <div class="col-md-12">
+                  <label for="meterNumber" class="form-label">Meter Number</label>
+                  <input name="meterNumbwer" type="number" class="form-control" id="meterNumbwer" value="" required>
+                  <div class="invalid-feedback">Please enter valid meter number</div>
                 </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                  Saepe animi et soluta ad odit soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus impedit molestias nostrum veniam. Qui amet ipsum iure. Dignissimos fuga tempore dolor.
+				  
+				<div class="col-md-12">
+                  <label for="subsType" class="form-label">Subscription Type:</label>
+                  <select name="subsType" class="form-select" id="subsType" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option>Prepaid</option>
+                    <option>Postpaid</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a valid data type.</div>
                 </div>
-              </div><!-- End Default Tabs -->
+				  
+				<div  class="col-md-12">  
+                  <label for="phone" class="form-label">Client Phone Number:</label>
+				<div class="input-group mb-6">
+                      <span class="input-group-text" id="basic-addon1">+234</span>
+                      <input name="phone" type="text" class="form-control" placeholder="7012345678" aria-label="phone" aria-describedby="basic-addon1" required>
+					<div class="invalid-feedback">Please a valid phone number.</div>
+                  </div>
+				  </div>
+				 
+				<div class="col-md-12">  
+                  <label for="amount" class="form-label">Amount:</label>
+				<div class="input-group mb-6">
+                      <span class="input-group-text">₦</span>
+                      <input name="amount" type="text" class="form-control" placeholder="0.00" aria-label="Amount (to the nearest naira)" required>
+                      <span class="input-group-text">.00</span>
+					<div class="invalid-feedback">Please wait for the amount to generate.</div>
+                    </div>
+				  </div>
+				  
+				  <div class="col-md-12"> 
+				  <div class="form-check form-switch">
+                      <input name="skipvalidation" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                      <label class="form-check-label" for="flexSwitchCheckChecked">Skip phone number validation</label>
+                    </div>
+				  </div>
+				  
+                <div class="col-12">
+                  <button name="submit" id="btn" class="btn btn-primary" type="submit">Validate Meter</button>
+                </div>
+              </form><!-- End Custom Styled Validation -->
 
             </div>
           </div>
+
 
   </main>
   <!-- End #main -->
@@ -93,6 +136,7 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+	  
 
 </body>
 

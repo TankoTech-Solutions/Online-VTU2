@@ -58,7 +58,7 @@
               <h5 class="card-title">[Carrier] Data Subscription</h5>
               
               <!-- Custom Styled Validation -->
-              <form class="row g-3 needs-validation" novalidate>
+              <form method="post" class="row g-3 needs-validation" novalidate>
 				  
 				<div class="col-md-12">
                   <label for="network" class="form-label">Network:</label>

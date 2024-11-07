@@ -153,8 +153,8 @@
             </a>
           </li>
           <li>
-            <a href="history_payment.php">
-              <i class="bi bi-circle"></i><span>Payment History</span>
+            <a href="history_fund.php">
+              <i class="bi bi-circle"></i><span>Funds History</span>
             </a>
           </li>
           <li>
@@ -164,8 +164,31 @@
           </li>
         </ul>
       </li><!-- End Nav -->
-		
+
       <li class="nav-heading"></li>
+
+	  <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#account-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Account</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="account-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="user_profile.php">
+              <i class="bi bi-circle"></i><span>My Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="user_setting.php">
+              <i class="bi bi-circle"></i><span>Setting</span>
+            </a>
+          </li>
+          <li>
+            <a href="user_setting.php">
+              <i class="bi bi-circle"></i><span>Change Password</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="contact.php">

@@ -67,7 +67,7 @@
 				  
 				  <?php if(isset($_GET['reset_token'])) { ?>
 				  
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form method="post" class="row g-3 needs-validation" novalidate>
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">New Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" required>

@@ -66,7 +66,7 @@
                     <p class="text-center small">We have sent a 6-digit OTP to your email [yourmail@example.com], input it be to verify your account.</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form method="post" class="row g-3 needs-validation" novalidate>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label"> Email</label>
