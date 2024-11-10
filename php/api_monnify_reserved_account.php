@@ -1,4 +1,4 @@
-<?php require_once('../includes/_conn.php'); ?>
+<?php //require_once('../includes/_conn.php'); ?>
 <?php
 //session_start();
 
@@ -67,12 +67,12 @@ class CustomCurlClient {
 //New Virtual Account Request Params
 $requestBody = [
     "accountReference" => tt_random_string(26),
-    "accountName" => "New Account Name2",
+    "accountName" => $fullname,
     "currencyCode"=> "NGN",
     "contractCode" => MoCONTRACT,
-    "customerEmail" => "newemail3@yahoo.com",
-    "bvn"=> "28510001244",
-    "customerName" => "New Customer Name2",
+    "customerEmail" => $email,
+    "bvn"=> "00000000000",
+    "customerName" => $fullname,
     "getAllAvailableBanks"=> true
 ]; //"preferredBanks" => ["232","50515","035"]
 
@@ -99,7 +99,7 @@ if(isset($value["requestSuccessful"])) {
 		//ACCOUNT ONE
 		//Sterling  
 		if($value["responseBody"]["accounts"][0]["bankCode"]== "232"){
-			 $sterling_no 	= $value["responseBody"]["accounts"][0]["accountNumber"];
+			 $sterling_no	= $value["responseBody"]["accounts"][0]["accountNumber"];
 			 $sterling_name = $value["responseBody"]["accounts"][0]["bankName"];
 		 
 		 //Wema    
@@ -116,43 +116,43 @@ if(isset($value["requestSuccessful"])) {
 		 
 		//ACCOUNT TWO
 		if($value["responseBody"]["accounts"][1]["bankCode"]== "232"){
-			 $sterling =  $value["responseBody"]["accounts"][1]["accountNumber"];
+			 $sterling_no	=  $value["responseBody"]["accounts"][1]["accountNumber"];
 			 $sterling_name = $value["responseBody"]["accounts"][1]["bankName"];
 			 
 		}else if($value["responseBody"]["accounts"][1]["bankCode"]== "035"){
-			 $wema =  $value["responseBody"]["accounts"][1]["accountNumber"];
+			 $wema_no 	=  $value["responseBody"]["accounts"][1]["accountNumber"];
 			 $wema_name = $value["responseBody"]["accounts"][1]["bankName"];
 		 
 		}else if($value["responseBody"]["accounts"][1]["bankCode"]== "50515"){
-			 $rolex =  $value["responseBody"]["accounts"][1]["accountNumber"];
-			 $rolex_name = $value["responseBody"]["accounts"][1]["bankName"];
+			 $rolex_no 	=  $value["responseBody"]["accounts"][1]["accountNumber"];
+			 $rolex_name= $value["responseBody"]["accounts"][1]["bankName"];
 		 
 		}else{ }
 		 
 		 //ACCOUNT THREE
 		if($value["responseBody"]["accounts"][2]["bankCode"]== "232"){
-			 $sterling =  $value["responseBody"]["accounts"][2]["accountNumber"];
+			 $sterling_no	=  $value["responseBody"]["accounts"][2]["accountNumber"];
 			 $sterling_name = $value["responseBody"]["accounts"][2]["bankName"];
 			 
 		}else if($value["responseBody"]["accounts"][2]["bankCode"]== "035"){
-			 $wema =  $value["responseBody"]["accounts"][2]["accountNumber"];
+			 $wema_no	=  $value["responseBody"]["accounts"][2]["accountNumber"];
 			 $wema_name = $value["responseBody"]["accounts"][2]["bankName"];
 		 
 		}else if($value["responseBody"]["accounts"][2]["bankCode"]== "50515"){
-			 $rolex =  $value["responseBody"]["accounts"][2]["accountNumber"];
-			 $rolex_name = $value["responseBody"]["accounts"][2]["bankName"];
+			 $rolex_no 	=  $value["responseBody"]["accounts"][2]["accountNumber"];
+			 $rolex_name= $value["responseBody"]["accounts"][2]["bankName"];
 		 
 		}else{ }
 	 
 	   //UPDATE CUSTOMER ACCOUNT	 
 	   mysqli_query($conn, "UPDATE user SET 								
-							  wema_bank 	= '".$wema_name."',
-							  wema_number = '".$wema_no."',
-							  sterling_bank= '".$sterling_name."',
-							  sterling_number= '".$sterling_no."',
-							  rolex_bank 	= '".$rolex_name."',
-							  rolex_number= '".$rolex_no."'
-							WHERE email='getjunaidu@yahoo.com'");  
+							  wema_bank 		= '".$wema_name."',
+							  wema_number 		= '".$wema_no."',
+							  sterling_bank		= '".$sterling_name."',
+							  sterling_number	= '".$sterling_no."',
+							  rolex_bank 		= '".$rolex_name."',
+							  rolex_number		= '".$rolex_no."'
+							WHERE email	= '".$email."'");  
 			 
 	echo "YAHOO! New Account Request Successfull!<br/>";
 	} else { 

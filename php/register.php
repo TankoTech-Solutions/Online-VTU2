@@ -48,22 +48,23 @@ if (isset($_POST["btnSave"])) {
 	
 	}else{     
 
-		$password 	= md5($password);
-		$refer_code	= tt_get_initials($fullname).tt_random_string(6);
+		$hash_pass 	= md5($password);
+		$refer_code	= strtoupper(tt_get_initials($fullname).tt_random_string(6));
 		$add_date	= date("Y/m/d H:i A");
 		$user_ip	= getenv("REMOTE_ADDR");
 		$acct_type	= "Smart Earner";
 		
 		$sql = "INSERT INTO user (fullname, email, phone, status, password, balance, refer_balance, 
 		refer_code, kyc_update, date_add, user_ip, acct_type)
-		VALUES ('".$fullname."', '".$email."',	'".$phone."', '0','".$password."',	'0',	
+		VALUES ('".$fullname."', '".$email."',	'".$phone."', '0','".$hash_pass."',	'0',	
 				'0',	'".$refer_code."',	'0', '".$add_date."', '".$user_ip."','".$acct_type."')";
 		
 		if ($conn->query($sql) === TRUE) {
-		  	$user_id = $conn->insert_id;			
+		  	$user_id = $conn->insert_id;	
 			
 
 			//--- Create wallet reserved account here
+			include("api_monnify_reserved_account.php");
 
 
 			//--- Auto login
@@ -71,9 +72,9 @@ if (isset($_POST["btnSave"])) {
 			$_SESSION['MM_Email']	 	= $email;
 			$_SESSION['MM_Fullname']	= $fullname;
 		  	$noted = tt_alert(' New account create successfully.', 1);
-			
-			
+						
 			header("Location: index.php");
+			
 		} else {
 		  echo "Error: " . $sql . "<br>" . $conn->error;
 		}
@@ -171,20 +172,20 @@ if (isset($_POST["btnSave"])) {
                       <label for="yourPhone" class="form-label"> Phone No.</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">+234</span>
-                        <input type="number" name="phone" class="form-control" id="yourPhone" value="<?= $password; ?>" required>
+                        <input type="number" name="phone" class="form-control" id="yourPhone" value="<?= $phone; ?>" required>
                         <div class="invalid-feedback">Please enter your phone number.</div>
                       </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <input type="password" name="password" class="form-control" id="yourPassword" value="<?= $password; ?>" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
 
                     <div class="col-12">
                       <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                        <input class="form-check-input" name="terms" type="checkbox"  value="<?= $accept_term; ?>" id="acceptTerms" required>
                         <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
                         <div class="invalid-feedback">You must agree before submitting.</div>
                       </div>

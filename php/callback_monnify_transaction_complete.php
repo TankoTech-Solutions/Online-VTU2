@@ -89,6 +89,7 @@ fwrite($myfile, "--- NEW TRANSACTION COMPLETE RESPONSE ---\n");
 					fwrite($myfile, "IP is from monnify server\n");
 					
                      if ($res_payment_status == "PAID") {
+						 fwrite($myfile, $response);
 						 fwrite($myfile, "Payment status is paid\n");
                          
 						 //Build description
@@ -97,7 +98,11 @@ fwrite($myfile, "--- NEW TRANSACTION COMPLETE RESPONSE ---\n");
 						 //NB: Avoid duplicate transaction (Double deposit)
 						 $check_query=mysqli_query($conn,"SELECT * FROM deposit WHERE reference_no = '$res_trans_ref'");
         				 $check_row = mysqli_num_rows($check_query) or die(mysqli_error($conn));
-        
+        				
+						 
+							 
+							fwrite($myfile, "query 1 finish successfull!\n");
+						 
                          if($check_row > 0){
 							 fwrite($myfile, "Transaction already exist\n");
                               http_response_code(200);
@@ -106,7 +111,10 @@ fwrite($myfile, "--- NEW TRANSACTION COMPLETE RESPONSE ---\n");
 							 
                               //Add into the payers account
 							 $add_sql = "INSERT INTO deposit (reference_no, user_id, fullname, prev_amount, paid_amount, new_amount, charge_amount, status, description, date, method) 
-							 VALUES ('$res_trans_ref', '$user_id', '$fullname', '$prev_balance', '$res_amount_paid' '$new_amount', '$charge_amount' ,'1','$description','$time','$res_method')";
+							 VALUES ('$res_trans_ref', $user_id, '$fullname', '$prev_balance', '$res_amount_paid', '$new_amount', '$charge_amount' ,'1', '$description','$time','$res_method')";
+							 
+							 
+							fwrite($myfile, "query 2 finish successfull!\n");
 							 if (mysqli_query($conn, $add_sql)) { 
 									fwrite($myfile, "Insert deposit query executed successfull!\n");
 								} else { 

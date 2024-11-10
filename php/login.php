@@ -35,7 +35,7 @@ if (isset($_POST['btnSubmit'])) {
     $_SESSION['MM_Fullname']	= $fullname;
 							 
     //Success redirection
-    header("Location: dashboard.php");						 
+    header("Location: index.php");						 
   }elseif($loginFoundUser > 1) {
   	//Failed redirection
 	$msg = "<i class='fa fa-exclamation-circle'></i> OMG! There is user complict in the system, please contect us.";

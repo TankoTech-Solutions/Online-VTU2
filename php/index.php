@@ -1,4 +1,5 @@
 <?php require_once('../includes/_conn.php'); ?>
+<?php require_once('../includes/_restrict.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">

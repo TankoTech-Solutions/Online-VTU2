@@ -47,9 +47,6 @@ $conn = new mysqli($host, $db_user, $db_pass, $db_name);
        	$app = $result->fetch_assoc();
 		extract($app);
 	}
-?>
-	
-<?php 
 	
 	//initialize the session
 	 if (!isset($_SESSION)) {
