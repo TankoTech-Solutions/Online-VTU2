@@ -1,19 +1,19 @@
 <?php session_start();
 	require_once('conn.php');
 	
-	$_SESSION['id']   = NULL;
-	$_SESSION['mail'] = NULL;
-	$_SESSION['name'] = NULL;
+	$_SESSION['MM_ID']  	 = NULL;
+	$_SESSION['MM_Fullname'] = NULL;
+	$_SESSION['MM_Email'] 	 = NULL;
 	
-	unset($_SESSION['id']);
-	unset($_SESSION['mail']);
-	unset($_SESSION['name']);
+	unset($_SESSION['MM_ID']);
+	unset($_SESSION['MM_Fullname']);
+	unset($_SESSION['MM_Email']);
 	
 	unset($_SERVER['HTTP_REFERER']);
 
 	session_unset();
 	session_destroy();  	
 	
-	header("Location: ../index.php");
+	header("Location: ../php/index.php");
 	exit;
 ?>

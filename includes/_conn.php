@@ -52,9 +52,8 @@ $conn = new mysqli($host, $db_user, $db_pass, $db_name);
 <?php 
 	
 	//initialize the session
-	 if(!session_start())
-		{
-			session_start();
+	 if (!isset($_SESSION)) {
+  			session_start();
 			ob_start();
 		}
  
@@ -62,9 +61,11 @@ $conn = new mysqli($host, $db_user, $db_pass, $db_name);
 	if(file_exists('../includes/_tt_functions.php')) {
 		include_once('../includes/_tt_functions.php');
 		include_once('../includes/_tt_variables.php');
+		include_once('../includes/_tt_function_query.php');
 	} else {
 		include_once('includes/_tt_functions.php');
 		include_once('includes/_tt_variables.php');
+		include_once('includes/_tt_function_query.php');
 	}
 	
 $min = -1; //This refers to minimum amount banch-mark.	   

@@ -1,4 +1,50 @@
 <?php require_once('../includes/_conn.php'); ?>
+<?php
+$msg		= "";
+$cook_user	= "";
+$cook_pass	= "";
+
+//Set/Unset remember me cookie
+//if(isset($_POST["remember"])){
+//	if(!isset($_COOKIE["cookie_user"])) {
+//  		setcookie("cookie_user", 1, time() * 60 * 24, "/");
+//	}else{
+//		setcookie("cookie_user", "", time() - 3600);
+//	}
+//	if(!isset($_COOKIE["cookie_pass"])) {
+//  		setcookie("cookie_pass", 1, time() * 60 * 24, "/");	
+//	}else{
+//		setcookie("cookie_pass", "", time() - 3600);
+//	}
+//	$cook_user = $_COOKIE["cookie_user"];
+//	$cook_pass = $_COOKIE["cookie_pass"];
+//}
+  
+if (isset($_POST['btnSubmit'])) { 
+  $email	= tt_sensatize_input($conn, $_POST['username']);
+  $password	= tt_sensatize_input($conn, $_POST['password']);
+  $remember	= isset($_POST['remember']) ? "Yes" : "No";
+ 
+  $LoginRS = mysqli_query($conn, "SELECT * FROM user WHERE email='".$email."' AND password='".md5($password)."'") or die(mysqli_error($conn));
+  $loginFoundUser = mysqli_num_rows($LoginRS);
+  if ($loginFoundUser == 1) { echo "User found!";
+    	extract(mysqli_fetch_array($LoginRS));
+    //declare session variables and assign them
+    $_SESSION['MM_ID']	 		= $user_id;
+    $_SESSION['MM_Email']	 	= $email;
+    $_SESSION['MM_Fullname']	= $fullname;
+							 
+    //Success redirection
+    header("Location: dashboard.php");						 
+  }elseif($loginFoundUser > 1) {
+  	//Failed redirection
+	$msg = "<i class='fa fa-exclamation-circle'></i> OMG! There is user complict in the system, please contect us.";
+  } else {
+  	//Failed redirection
+	$msg = "<i class='fa fa-exclamation-circle'></i> Ops! Invalid Email and/or Password. Please double check and try again.";
+  }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -64,6 +110,9 @@
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4"> Account Login</h5>
                     <p class="text-center small">Enter your  email & password to login</p>
+					<?php if($msg != "") { echo
+						'<p class="alert alert-danger">'.$msg; 
+					} ?>
                   </div>
 
                   <form method="post" class="row g-3 needs-validation" novalidate>
@@ -90,7 +139,7 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Login</button>
+                      <button name="btnSubmit" class="btn btn-primary w-100" type="submit">Login</button>
                     </div>
                     <div class="col-12">
                       <p class="small mb-0">Don't have account? <a href="register.php">Create an account</a></p>

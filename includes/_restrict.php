@@ -1,10 +1,10 @@
 
 <?php	
 // *** Restrict Access To Page: Grant or deny access to this page
-if (!isset($_SESSION['mail'])  || empty($_SESSION['mail'])) 
+if (!isset($_SESSION['MM_ID'])  || empty($_SESSION['MM_ID'])) 
 {
 	session_destroy();
-	header("Location: ../login/"); 
+	header("Location: ../php/login.php"); 
 	exit;	
 }
 
@@ -14,7 +14,7 @@ if (!isset($_SESSION['mail'])  || empty($_SESSION['mail']))
 	 
 if(time() > $_SESSION['expire']) 
 {
-	header("Location: logout.php"); 
+	header("Location: _logout.php"); 
 } else {
 	$_SESSION["expire"] = $session_life;
 }

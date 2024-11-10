@@ -1,5 +1,87 @@
 <?php require_once('../includes/_conn.php'); ?>
 
+<?php
+	$noted		= "";
+	$user_id 	= "";
+	$fullname 	= "";
+	$email 		= "";	
+	$phone 		= "";
+	$password 	= "";		
+	$accept_term= "";	
+
+if (isset($_POST["btnSave"])) { 	
+	$flag = 0; //display form or not?
+	
+	//$user_id 	= tt_sensatize_input($conn, $_POST['id']);
+	$fullname 	= tt_sensatize_input($conn, tt_case_title($_POST['fullname']));
+	$email 		= tt_sensatize_input($conn, strtolower($_POST['email']));
+	$phone 		= tt_sensatize_input($conn, $_POST['phone']);
+	$password 	= tt_sensatize_input($conn, $_POST['password']);
+	$accept_term= tt_sensatize_input($conn, $_POST['terms']);
+	  	
+	if($fullname=='' || empty($fullname)){
+		$noted = tt_alert(' Your full name is required!', 0);
+	}
+	
+	elseif($email=='' || empty($email)){
+	 	$noted = tt_alert(' Email address is required!', 0); 
+	}
+	elseif(isExists($conn, "user", "email", $email)){
+		$noted = tt_alert(' This email address has been use by another customer!', 0); 
+	}
+
+	elseif($phone=='' || empty($phone)){
+	 	$noted = tt_alert(' Phone number is required!', 0); 
+	}
+	elseif(!is_numeric($phone)){
+	 	$noted = tt_alert(' Invalid phone number!', 0); 
+	}
+	elseif(strlen($phone) < 10 || strlen($phone) > 15){
+	 	$noted = tt_alert(' Phone number is either too short or too much! Please check.', 0); 
+	} 
+	elseif(isExists($conn, "user", "phone", $phone)){
+		$noted = tt_alert(' This phone number is in use by another customer!', 0);  
+	}
+	
+	elseif(!isset($accept_term)){
+		$noted = tt_alert(' You need to accept our terms of service to register!', 0);  
+	
+	}else{     
+
+		$password 	= md5($password);
+		$refer_code	= tt_get_initials($fullname).tt_random_string(6);
+		$add_date	= date("Y/m/d H:i A");
+		$user_ip	= getenv("REMOTE_ADDR");
+		$acct_type	= "Smart Earner";
+		
+		$sql = "INSERT INTO user (fullname, email, phone, status, password, balance, refer_balance, 
+		refer_code, kyc_update, date_add, user_ip, acct_type)
+		VALUES ('".$fullname."', '".$email."',	'".$phone."', '0','".$password."',	'0',	
+				'0',	'".$refer_code."',	'0', '".$add_date."', '".$user_ip."','".$acct_type."')";
+		
+		if ($conn->query($sql) === TRUE) {
+		  	$user_id = $conn->insert_id;			
+			
+
+			//--- Create wallet reserved account here
+
+
+			//--- Auto login
+			$_SESSION['MM_ID']	 		= $user_id;
+			$_SESSION['MM_Email']	 	= $email;
+			$_SESSION['MM_Fullname']	= $fullname;
+		  	$noted = tt_alert(' New account create successfully.', 1);
+			
+			
+			header("Location: index.php");
+		} else {
+		  echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		
+	} 
+}/*/end if form submit */
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,12 +146,15 @@
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
                     <p class="text-center small">Enter your personal details to create account</p>
+					<?php if($noted != "") { 
+						echo $noted; 
+					} ?>
                   </div>
 
                   <form method="post" class="row g-3 needs-validation" novalidate>
                     <div class="col-12">
                       <label for="yourName" class="form-label"> Full Name</label>
-                      <input type="text" name="fullname" class="form-control" id="yourName" required>
+                      <input type="text" name="fullname" class="form-control" id="yourName" value="<?= $fullname; ?>" required>
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
 
@@ -77,7 +162,7 @@
                       <label for="yourEmail" class="form-label"> Email</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                      	<input type="email" name="email" class="form-control" id="yourEmail" required>
+                      	<input type="email" name="email" class="form-control" id="yourEmail" value="<?= $email; ?>" required>
                       	<div class="invalid-feedback">Please enter a valid Email adddress!</div>
 					  </div>
                     </div>
@@ -86,7 +171,7 @@
                       <label for="yourPhone" class="form-label"> Phone No.</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">+234</span>
-                        <input type="number" name="phone" class="form-control" id="yourPhone" required>
+                        <input type="number" name="phone" class="form-control" id="yourPhone" value="<?= $password; ?>" required>
                         <div class="invalid-feedback">Please enter your phone number.</div>
                       </div>
                     </div>
@@ -105,7 +190,7 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                      <button name="btnSave" class="btn btn-primary w-100" type="submit">Create Account</button>
                     </div>
                     <div class="col-12">
                       <p class="small mb-0">Already have an account? <a href="login.php">Login</a></p>
