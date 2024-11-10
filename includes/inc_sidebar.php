@@ -11,6 +11,28 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#fund-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Fund Wallet</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="fund-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="fund_paystack.php">
+              <i class="bi bi-circle"></i><span>Paystack (ATM)</span>
+          </a></li>
+          <li>
+            <a href="fund_manually.php">
+              <i class="bi bi-circle"></i><span>Manually</span>
+            </a>
+          </li>
+          <li>
+            <a href="fund_coupon.php">
+              <i class="bi bi-circle"></i><span>Coupon Code</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Nav -->
+
+      <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#data-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i><span>Buy Data</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -81,34 +103,6 @@
           <li>
             <a href="pay_subscription.php">
               <i class="bi bi-circle"></i><span>Cable Subscription</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#fund-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Fund Wallet</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="fund-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="fund_paystack.php">
-              <i class="bi bi-circle"></i><span>Paystack (ATM)</span>
-            </a>
-          </li>
-          <li>
-            <a href="fund_transfer.php">
-              <i class="bi bi-circle"></i><span>Bank Transfer</span>
-            </a>
-          </li>
-          <li>
-            <a href="fund_coupon.php">
-              <i class="bi bi-circle"></i><span>Coupon Code</span>
-            </a>
-          </li>
-          <li>
-            <a href="fund_manually.php">
-              <i class="bi bi-circle"></i><span>Manually</span>
             </a>
           </li>
         </ul>

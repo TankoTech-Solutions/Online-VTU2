@@ -1,4 +1,4 @@
-<?php include('../includes/_conn.php'); ?>
+<?php require_once('../includes/_conn.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -118,7 +118,8 @@
                       <img src="../assets/img/bank_sterling_icon.png" width="60" height="60" /></i>
                     </div>
                     <div class="ps-3">
-                      <h6>0116870025</h6>
+					  <a href="#" class="badge rounded-pill bg-info text-dark" onClick="copy()">Copy</a>
+                      <h6 id="acctSterling">0116870025</h6>
 						<span class="text-muted small pt-2 ps-1">Acct. Name:</span>
                       <span class="text-danger small pt-1 fw-bold">Junaidu Tanko Abdulrahman</span>
                     </div>
@@ -142,7 +143,8 @@
                       <img src="../assets/img/bank_wema_icon.png" width="60" height="60" /></i>
                     </div>
                     <div class="ps-3">
-                      <h6>0116870025</h6>
+					  <a href="#" class="badge rounded-pill bg-info text-dark" onClick="copy()">Copy</a>
+						<h6 id="acctWema">0116870025</h6>
 						<span class="text-muted small pt-2 ps-1">Acct. Name:</span>
                       <span class="text-danger small pt-1 fw-bold">Junaidu Tanko Abdulrahman</span>
                     </div>

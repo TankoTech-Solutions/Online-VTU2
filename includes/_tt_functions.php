@@ -250,16 +250,16 @@ function set_active($active, $page)
 }
 
 //Generate random strings
-function tt_random_string() 
+function tt_random_string($count) 
 {
-	$chars = "abcdefghijkmnopqrstuvwxyz023456789";
+	$chars = "abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	srand((double)microtime()*1000000);
 	$i = 0;
 	$pass = '' ;
-	while ($i <= 8) {
-		$num = rand() % 33;
-		$tmp = substr($chars, $num, 1);
-		$pass = $pass . $tmp;
+	while ($i <= $count) {
+		$num 	= rand() % 33;
+		$tmp 	= substr($chars, $num, 1);
+		$pass  .= $tmp;
 		$i++;
 	}
 	return $pass;

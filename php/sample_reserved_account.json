@@ -1,0 +1,43 @@
+// requestSuccessful is true and responseMessage is success
+{
+	"requestSuccessful":true,
+	"responseMessage":"success",
+	"responseCode":"0",
+	"responseBody":{
+		"contractCode":"1767638654",		
+		"accountReference":"672eacac460206197",
+		"accountName":"Jun",
+		"currencyCode":"NGN",
+		"customerEmail":"mymail@yahoo.com",
+		"customerName":"Junaidu",
+		"accounts":[
+			{
+				"bankCode":"035",
+				"bankName":"Wema bank",
+				"accountNumber":"0012053087",
+				"accountName":"Jun"
+			},
+			{
+				"bankCode":"232",
+				"bankName":"Sterling bank",				
+				"accountNumber":"7009587322",
+				"accountName":"Jun"
+			}
+		],
+		"collectionChannel":"RESERVED_ACCOUNT",
+		"reservationReference":"20NMZ4GD65HQBJY00001",
+		"reservedAccountType":"GENERAL",
+		"status":"ACTIVE",
+		"createdOn":"2024-11-09 01:28:29.358",
+		"incomeSplitConfig":[],
+		"bvn":"21212121212",
+		"restrictPaymentSource":false
+	}
+}
+
+// requestSuccessful is true but responseMessage is faild
+{
+	"requestSuccessful":false,
+	"responseMessage":"You cannot reserve more than 1 account(s) for a customer. Please contact support for assistance.",
+	"responseCode":"R42"
+}

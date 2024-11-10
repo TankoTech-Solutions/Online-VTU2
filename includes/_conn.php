@@ -22,12 +22,15 @@ $app_url = "https://tankotech.com.ng";
 	$this_array 	= array('localhost', '127.0.0.1', '192.168.0.0', '::1');
 	if(in_array($this_host, $this_array)) {		//Offline
 		$db_name 	= "online_vtu2";
-	}else{										//Online
-		$db_name 	= "tankote3_vtu";	
-	}
-		$host 		= "localhost";
 		$db_user 	= "getjunaidu86";
+		$host 		= "localhost";
 		$db_pass 	= "2004kiyawa";
+	}else{										//Online
+		$db_name 	= "tankote5_vtu2";	
+		$db_user 	= "tankote5_user";
+		$host 		= "localhost";
+		$db_pass 	= "Kiyawa*2004#";
+	}
 	
 // Create connection
 $conn = new mysqli($host, $db_user, $db_pass, $db_name);

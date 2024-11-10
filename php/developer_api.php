@@ -1,4 +1,4 @@
-<?php include('../includes/_conn.php'); ?>
+<?php require_once('../includes/_conn.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,22 +83,42 @@
                       <strong>Use the following url as your base URL</strong><br/> 
 						<code><?= $app_url . "/api/data"; ?></code>
                     </div>
+					  <span class="badge rounded-pill bg-info text-dark">Copy</span>
+					  <span class="badge rounded-pill bg-dark">Reset</span>
                   </div>
                 </div>
 				  
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingThree">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                      API Key
+                      Access Token
                     </button>
                   </h2>
                   <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
+                      <strong>Use the following 64 bit characters as your Access Token</strong><br/>
+						<code> 2Bd03Dsklf3I5A7ACACJm1Atx9ChB19Ax6obynG2z48BAw3axEeCCBqCC5Br</code>
+                    </div>
+					  <span class="badge rounded-pill bg-info text-dark">Copy</span>
+					  <span class="badge rounded-pill bg-dark">Reset</span>
+                  </div>
+                </div>
+				  
+				 <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="true" aria-controls="collapse5">
+                      API Key
+                    </button>
+                  </h2>
+                  <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
                       <strong>Use the following 64 bit characters as your unique API Key</strong><br/>
 						<code> 2Bd03Dsklf3I5A7ACACJm1Atx9ChB19Ax6obynG2z48BAw3axEeCCBqCC5Br</code>
                     </div>
+					  <span class="badge rounded-pill bg-info text-dark">Copy</span>
+					  <span class="badge rounded-pill bg-dark">Reset</span>
                   </div>
-                </div>
+                </div>  
 				  
 				<div class="accordion-item">
                   <h2 class="accordion-header" id="headingFour">
@@ -108,7 +128,7 @@
                   </h2>
                   <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-						<strong>If you need more help, please contact us from our <a href="contact.php">contact page</a>.</strong> Please do not hesitate.
+						<strong>If you need more help, please  refer to our <button class="btn-success">API Documentation</button> or contact us from our <a href="contact.php">contact page</a>.</strong> Please do not hesitate.
                     </div>
                   </div>
                 </div>

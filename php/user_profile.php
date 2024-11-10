@@ -1,4 +1,4 @@
-<?php include('../includes/_conn.php'); ?>
+<?php require_once('../includes/_conn.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +58,9 @@
 
               <img src="../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
               <h2>Kevin Anderson</h2>
-              <h3>Web Designer</h3>
+				<h3><a href="mailto:getjunaidu86@hotmail.com">tankojunaidu@hotmail.com</a></h3>
+				<h3><a href="tel:07068700696">07068700696</a></h3>
+				<a href="user_setting.php" name="btnEdit" class="btn btn-success">Edit Information</a>
               <div class="social-links mt-2">
                 <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>

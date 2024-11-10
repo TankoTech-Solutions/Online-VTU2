@@ -37,9 +37,11 @@
 	define("MAIL_USER",			"tankote3");
 	
 /* MONNIFY APIS */
-	define("MAPI",				"MK_TEST_WN9FQE2E5X",	true); 				//API Code
-	define("MSK",				"S6N0M0CUKKP9YBELV64BHNUEZ3CKJ8MW",	true);	//Secrete Key
-	define("MCONTRACT",			"1767638654",	true);						//Contract Number
+	define("MoAPI",				"MK_TEST_WN9FQE2E5X",	true); 				//API Code
+	define("MoSK",				"S6N0M0CUKKP9YBELV64BHNUEZ3CKJ8MW",	true);	//Secrete Key
+	define("MoCONTRACT",		"1767638654",	true);						//Contract Number
+	define("MoBURL",			"https://sandbox.monnify.com",	true);		//Base URL
+	define("MoACCTNO",			"2123988285",	true);						//Account Number
 	
 /* Husmodata Topup API Token Constants */
 	define("HMD_AUTH_TOKEN",	"e8ddcea6f65a964c5ceb41587dc82596a83650f7");	//Will be find in Husmodata Developer's API page
