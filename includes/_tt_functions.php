@@ -131,6 +131,17 @@ function tt_alert_box($str, $flag)
 	return $alert;
 }
 
+//Get single value
+function get_value($conn, $table, $field, $wField, $wValue) {	
+	$sql 	= mysqli_query($conn, "SELECT ".$field." FROM ".$table." WHERE ".$wField." = '".$wValue."'");
+
+	if(mysqli_num_rows($sql) > 0){
+		$row 	= mysqli_fetch_assoc($sql);
+		return $row[$field];
+	}	
+	return "";
+}
+
 //Check if their is banning?
 function isBanned($getBan) {	
 		$msg	= "";

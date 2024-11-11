@@ -52,45 +52,50 @@ if (isset($_POST["btnSave"])) {
 		$add_date	= date("Y/m/d H:i A");
 		$user_ip	= getenv("REMOTE_ADDR");
 		$acct_type	= "Smart Earner";
-		$otp_code	= md5(strtoupper(tt_random_number(6)));
+		$otp_code	= tt_random_number(6);
 		
 		$sql = "INSERT INTO user (fullname, email, phone, status, password, balance, refer_balance, 
 		refer_code, kyc_update, date_add, user_ip, acct_type)
 		VALUES ('".$fullname."', '".$email."',	'".$phone."', '0','".$hash_pass."',	'0',	
 				'0',	'".$refer_code."',	'0', '".$add_date."', '".$user_ip."','".$acct_type."')";
 		
-		$sql_otp = "INSERT INTO otp (user_id, otp, purpose, sent_via, date_time, status)
-		VALUES ('".$user_id."', '".$otp_code."',	'New Registration', 'E-Mail', '".$add_date."', '0')";
-		
-		if (($conn->query($sql) === TRUE) and ($conn->query($sql_otp) === TRUE)) {
+		if ($conn->query($sql) === TRUE) {
 		  	$user_id = $conn->insert_id;	
 			
-
-			//--- Create wallet reserved account here
-			include("api_monnify_reserved_account.php");
+			//Insert and send the otp.
+			$sql_otp = "INSERT INTO otp (user_id, otp, purpose, sent_via, date_time, status)
+			VALUES ('".$user_id."', '".md5($otp_code)."',	'New Registration', 'E-Mail', '".$add_date."', '0')";
 			
-			//If account created without error
-			if($err == "") {
-				
-				//--- Create verification OTP and send it to email.
-				include("../mails/mail_otp.php");
-				$err_mail = do_send_mail($app_email, $email, $subject, $content);
-				
-				if($err_mail == "") {
+			if($conn->query($sql_otp) === TRUE) {
 
-					//--- Refer veification page.			
-					$_SESSION['MM_ID']	 	= $user_id;			
-					$_SESSION['MM_Email']	= $email;	
-					//header("Location: verification.php");
-					
-				}else{ 
-					$msg = $err_mail; //Show failed email error
+				//--- Create wallet reserved account here
+				include("api_monnify_reserved_account.php");
+
+				//If account created without error
+				if($err_wallet == "") {
+
+					//--- Create verification OTP and send it to email.
+					include("../mails/mail_otp.php");
+					$err_mail = do_send_mail($app_email, $email, $subject, $content);
+
+					if($err_mail == "") {
+
+						//--- Refer dashboard page.			
+						$_SESSION['MM_ID']	 	= $user_id;			
+						$_SESSION['MM_Email']	= $email;	
+						
+						header("Location: verification.php");
+					}else{ 
+						$noted = $err_mail; //Show failed email error (Already formatted with tt_alert)
+					}
+				}else{
+					$noted = tt_alert($err_wallet, 0); //Show failed wallet account error
 				}
 			}else{
-				$msg = $err; //Show failed wallet account error
+				$noted = tt_alert("Failed to generate and save OTP!", 0);
 			}
 		} else {
-		  echo "Error: " . $sql . "<br>" . $conn->error;
+		  $noted = tt_alert("Error: " . $sql . "<br>" . $conn->error, 0);
 		}
 		
 	} 
@@ -197,7 +202,7 @@ if (isset($_POST["btnSave"])) {
 
                     <div class="col-12">
                       <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox"  <?php if(isset($accept_term)) { echo 'checked'; }else{ echo ''; ?> required>
+                        <input class="form-check-input" name="terms" type="checkbox"  <?php if(isset($accept_term)) { echo 'checked'; }else{ echo ''; } ?> required>
                         <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
                         <div class="invalid-feedback">You must agree before submitting.</div>
                       </div>
@@ -241,7 +246,7 @@ if (isset($_POST["btnSave"])) {
   <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../assets/vendor/php-email-form/validate.js"></script>
-
+	
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
 

@@ -1,6 +1,6 @@
 <?php //require_once('../includes/_conn.php'); ?>
 <?php
-$err = "";
+$err_wallet = "";
 
 //----- Requesting OAuth Access Token by generating and passing AuthToken
 $reqTokenCode	= MoAPI.":".MoSK;
@@ -157,10 +157,11 @@ if(isset($value["requestSuccessful"])) {
 	//echo "YAHOO! New Account Request Successfull!<br/>";
 	} else { 
 		//Remember same email can't register more one
-		$err = "Response Message is failed : ".$value["responseMessage"]." <br/> Error Code: ".$value["responseCode"];
+		$err_wallet = "Response Message is failed : ".$value["responseMessage"]." <br/>
+		Error Code: ".$value["responseCode"];
 	}
 }else{
-	$err = "Ops! New Account Request Unsuccessful!<br/>";
+	$err_wallet = "Ops! New Account Request Unsuccessful!<br/>";
 }
-echo $err;
+//echo $err_wallet;
 ?>
