@@ -75,14 +75,12 @@ if (isset($_POST["btnSave"])) {
 				//--- Create verification OTP and send it to email.
 				include("../mails/mail_otp.php");
 				$err_mail = do_send_mail($app_email, $email, $subject, $content);
-				
 				if($err_mail == "") {
 
 					//--- Refer veification page.			
 					$_SESSION['MM_ID']	 	= $user_id;			
 					$_SESSION['MM_Email']	= $email;	
 					//header("Location: verification.php");
-					
 				}else{ 
 					$msg = $err_mail; //Show failed email error
 				}
@@ -94,7 +92,7 @@ if (isset($_POST["btnSave"])) {
 		}
 		
 	} 
-}//end if form submit
+}/*/end if form submit */
 ?>
 
 <!DOCTYPE html>

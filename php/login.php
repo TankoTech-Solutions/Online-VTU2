@@ -29,13 +29,18 @@ if (isset($_POST['btnSubmit'])) {
   $loginFoundUser = mysqli_num_rows($LoginRS);
   if ($loginFoundUser == 1) { echo "User found!";
     	extract(mysqli_fetch_array($LoginRS));
-    //declare session variables and assign them
-    $_SESSION['MM_ID']	 		= $user_id;
-    $_SESSION['MM_Email']	 	= $email;
-    $_SESSION['MM_Fullname']	= $fullname;
+		if($status == "1") {							 
+			//declare session variables and assign them
+			$_SESSION['MM_ID']	 		= $user_id;
+			$_SESSION['MM_Email']	 	= $email;
+			$_SESSION['MM_Fullname']	= $fullname;
 							 
-    //Success redirection
-    header("Location: index.php");						 
+			//Success redirection
+			header("Location: index.php");	
+		}else{
+			//Unverify account
+			header("Location: verification.php");
+		}
   }elseif($loginFoundUser > 1) {
   	//Failed redirection
 	$msg = "<i class='fa fa-exclamation-circle'></i> OMG! There is user complict in the system, please contect us.";

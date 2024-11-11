@@ -89,49 +89,35 @@ fwrite($myfile, "--- NEW TRANSACTION COMPLETE RESPONSE ---\n");
 					fwrite($myfile, "IP is from monnify server\n");
 					
                      if ($res_payment_status == "PAID") {
-						 fwrite($myfile, $response);
 						 fwrite($myfile, "Payment status is paid\n");
                          
 						 //Build description
-                         $description 	= "Deposit transaction of ₦".$amount." by the user with email: ".$email." and name: ".$fullname." has been occured.";
-                          
+                         $description 	= "Deposit transaction of N".$res_amount_paid." by the user with email: ".$email." and name: ".$fullname." has been occured.";
+                         
+						 fwrite($myfile, $description."\n");  
+						 
 						 //NB: Avoid duplicate transaction (Double deposit)
-						 $check_query=mysqli_query($conn,"SELECT * FROM deposit WHERE reference_no = '$res_trans_ref'");
-        				 $check_row = mysqli_num_rows($check_query) or die(mysqli_error($conn));
-        				
-						 
-							 
-							fwrite($myfile, "query 1 finish successfull!\n");
-						 
+						 $check_sql	  = "SELECT * FROM deposit WHERE reference_no = '".$res_trans_ref."'";
+						 $check_query = mysqli_query($conn, $check_sql);
+        				 $check_row   = mysqli_num_rows($check_query);
                          if($check_row > 0){
 							 fwrite($myfile, "Transaction already exist\n");
                               http_response_code(200);
                               exit();
                          }else{
 							 
-                              //Add into the payers account
+                             //Add into the payers account
 							 $add_sql = "INSERT INTO deposit (reference_no, user_id, fullname, prev_amount, paid_amount, new_amount, charge_amount, status, description, date, method) 
-							 VALUES ('$res_trans_ref', $user_id, '$fullname', '$prev_balance', '$res_amount_paid', '$new_amount', '$charge_amount' ,'1', '$description','$time','$res_method')";
+							 VALUES ('".$res_trans_ref."', ".$user_id.", '".$fullname."', '".$prev_balance."', '".$res_amount_paid."', '".$new_amount."', '".$charge."', '1', '".$description."', '".$time."', '".$res_method."')";
 							 
-							 
+							mysqli_query($conn, $add_sql);							 							 
 							fwrite($myfile, "query 2 finish successfull!\n");
-							 if (mysqli_query($conn, $add_sql)) { 
-									fwrite($myfile, "Insert deposit query executed successfull!\n");
-								} else { 
-									// Query failed 
-									fwrite($myfile, "Error: ".$mysqli_error($conn)."\n"); 
-								}   
-							 
-                              //--- Update user's balance
-    						  $user_sql	= "UPDATE user SET  balance = '$new_balance' WHERE email = '$res_email'";
-                              if (mysqli_query($conn, $db_user)) { 
-									fwrite($myfile, "Update user balance query executed successfull!\n");
-								} else { 
-									// Query failed 
-									fwrite($myfile, "Error: ".$mysqli_error($conn)."\n"); 
-								}   
+							 							 
+                            //--- Update user's balance
+    						$user_sql	= "UPDATE user SET  balance = '".$new_balance."' WHERE email = '".$res_email."'";
+                            mysqli_query($conn, $user_sql);
                                     
-							 fwrite($myfile, "All transaction stages is successful.\n");
+							fwrite($myfile, "All transaction stages is successful.\n");
                               
 							 //  http_response_code(200);
                               http_response_code(200);

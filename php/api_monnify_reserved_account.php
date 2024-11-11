@@ -1,6 +1,6 @@
 <?php //require_once('../includes/_conn.php'); ?>
 <?php
-//session_start();
+$err = "";
 
 //----- Requesting OAuth Access Token by generating and passing AuthToken
 $reqTokenCode	= MoAPI.":".MoSK;
@@ -89,12 +89,12 @@ $value = json_decode($response, true);
 //echo $response;
 
 if(isset($value["requestSuccessful"])) {
-	echo "Request succeed!<br/>";
+	//echo "Request succeed!<br/>";
 	
 	if($value["responseMessage"] == "success"){
 		 
 		$account_name  = $value["responseBody"]["accountName"];
-		echo $account_name;
+		//echo $account_name;
 		
 		//ACCOUNT ONE
 		//Sterling  
@@ -154,13 +154,13 @@ if(isset($value["requestSuccessful"])) {
 							  rolex_number		= '".$rolex_no."'
 							WHERE email	= '".$email."'");  
 			 
-	echo "YAHOO! New Account Request Successfull!<br/>";
+	//echo "YAHOO! New Account Request Successfull!<br/>";
 	} else { 
 		//Remember same email can't register more one
-		echo "Response Message is failed : ".$value["responseMessage"]." <br/> Error Code: ".$value["responseCode"];
+		$err = "Response Message is failed : ".$value["responseMessage"]." <br/> Error Code: ".$value["responseCode"];
 	}
 }else{
-	echo "Ops! New Account Request Unsuccessful!<br/>";
+	$err = "Ops! New Account Request Unsuccessful!<br/>";
 }
-
+echo $err;
 ?>

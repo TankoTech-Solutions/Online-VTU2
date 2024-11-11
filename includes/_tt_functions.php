@@ -265,6 +265,22 @@ function tt_random_string($count)
 	return $pass;
 }
 
+//Generate random number (OTP)
+function tt_random_number($count) 
+{
+	$chars = "0123456789";
+	srand((double)microtime()*1000000);
+	$i = 0;
+	$otp = '' ;
+	while ($i <= $count) {
+		$num 	= rand() % 33;
+		$tmp 	= substr($chars, $num, 1);
+		$otp  .= $tmp;
+		$i++;
+	}
+	return $otp;
+}
+
 //Upload picture file to the server.
 function tt_upload_picture($conn, $_file, $new_dir, $new_name, $new_height, $sql) 
 {	
@@ -385,19 +401,22 @@ function tt_str_trim($str, $count, $url) {
  
 //function to send email
 function do_send_mail($from, $to, $subj, $msg) {
-	include('Mail.php'); 			// includes the PEAR Mail class, already on your server.
+	include('Mail.php'); // includes the PEAR Mail class, already on your server.
 	
-	//The email headers
-	$headers = array ('From' => $from, 'To' => $to, 'Subject' => $subj); 
+	//The email headers	
+	$cont_type	= "text/html; charset=UTF-8\r\n";
+	$headers 	= array ('From' => $from, 'To' => $to, 'Subject' => $subj, "Content-Type" => $cont_type); 
+	
 	// SMTP protocol with the username and password of an existing email account in your hosting account
 	$smtp = Mail::factory('smtp', array ('host'=>'localhost', 'auth'=>true, 'username'=>MAIL_USER, 'password'=>MAIL_PASS, 'port'=>'25'));
 	//Do send mail
 	$mail = $smtp->send($to, $headers, wordwrap($msg));
 	
 	if (PEAR::isError($mail)){
-		//echo("<p>" . $mail->getMessage() . "</p>");
+		return tt_alert('Email error : '.$mail->getMessage(), 0);
 	}else {
-		//echo("<p>Message successfully sent!</p>");
+		return "";
+		//return tt_alert('Email sent successfully.', 1);
 		// header("Location: http://www.example.com/"); // you can redirect page on successful submission.
 	}
 }

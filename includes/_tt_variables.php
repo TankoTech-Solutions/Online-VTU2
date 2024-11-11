@@ -30,11 +30,14 @@
 	define("APP_ADMIN_MAIL",	"getjunaidu86@hotmail.com");
 	define("APP_ADMIN_PHONE",	"+2347068700696");
 	
-/* SMS/Mail Constants */
+/* SMS Constants */
 	define("SMS_TITLE",			"TankoTech");
 	define("SMS_API_KEY",		"TLBiy6fy1arTd9JWBFGvm52NJto77287x3Ug9WMJ9YGfBUsyQ5iLXvblxpvQnP");
 	define("SMS_SECRATE_KEY",	"tsk_k04e60bcf7cfe9b7313391opkm");
-	define("MAIL_USER",			"tankote3");
+	
+/* Mail Constants */
+	define("MAIL_USER",			"tankote5");
+	define("MAIL_PASS",			"w2E;32-TElub6T");
 	
 /* MONNIFY APIS */
 	define("MoAPI",				"MK_TEST_WN9FQE2E5X",	true); 				//API Code

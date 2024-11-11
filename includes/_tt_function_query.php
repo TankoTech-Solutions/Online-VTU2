@@ -1,23 +1,6 @@
 <?php
  /*   SQL Query Founction   */
 
-// COURSE / CERTIFICATION //
-//This function will return the CERTIFICATION TITLE base of it's feeded ID. 
-function get_certification($conn, $id) 
-{
-	if($id != '') {
-	
-	$result = $conn->query("SELECT title FROM tbl_certification WHERE certId = '".$id."' ") or die("get_certification() SQL Error: ".mysqli_error($conn)."\n\n Sender: ".$sender);
-	$c		= $result->num_rows;
-		if($c != 0){
-			$r = $result->fetch_assoc();
-			return 	$r['title'];
-		}
-	}
-	return 'No Value!';
-}
-
-
 //Check if value exists
 function isExists($conn, $table, $field, $value){
 		$result = $conn->query("SELECT $field FROM $table WHERE $field='".$value."' ") or die("Not Selected: ".mysqli_error($conn));

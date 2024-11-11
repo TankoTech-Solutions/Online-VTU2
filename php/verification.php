@@ -1,4 +1,52 @@
 <?php require_once('../includes/_conn.php'); ?>
+<?php
+$msg	= "";
+$otp	= "";
+$email	= $_SESSION['MM_Email'];
+$user_id= $_SESSION['MM_ID'];
+  
+if (isset($_POST['btnSubmit'])) { 
+  $otp	= tt_sensatize_input($conn, $_POST['otp']);
+ 
+	if($otp=='' || empty($otp)){
+	 	$noted = tt_alert(' OTP code is required!', 0); 
+	}
+	elseif(!is_numeric($otp)){
+	 	$noted = tt_alert(' OTP code must be numeric only!', 0); 
+	}
+	elseif(strlen($phone) < 6 || strlen($phone) > 6){
+	 	$noted = tt_alert(' OTP code must be 6-digits number! Please check.', 0); 
+	}else{
+	
+		$query = mysqli_query($conn, "SELECT * FROM otp WHERE otp='".md5($user_id)."' AND
+  								user_id='".$user_id."' AND status='0'") or die(mysqli_error($conn));
+	
+	  $count = mysqli_num_rows($query);
+	  if ($count == 1) { echo "Record found!";
+			extract(mysqli_fetch_array($query));
+
+			mysqli_query($conn, "UPDATE user SET status = '1' WHERE user_id = $user_id");
+			mysqli_query($conn, "UPDATE otp SET status = '1' WHERE user_id = $user_id");
+
+				//--- Auto login
+				$_SESSION['MM_ID']	 		= $user_id;
+				$_SESSION['MM_Email']	 	= $email;
+				$_SESSION['MM_Fullname']	= $fullname;
+				$noted = tt_alert(' New account create successfully.', 1);
+
+			//Success redirection
+			header("Location: index.php");	
+	  }elseif($count > 1) {
+		//Failed redirection
+		$msg = "<i class='fa fa-exclamation-circle'></i> OMG! There is user complict in the system, please contect us.";
+	  } else {
+		//Failed redirection
+		$msg = "<i class='fa fa-exclamation-circle'></i> Ops! Invalid Email and/or Password. Please double check and try again.";
+	  }
+	}
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,27 +106,28 @@
               </div><!-- End Logo -->
 
               <div class="card mb-3">
-
-                <div class="card-body">
-
+			
+			<!-- Received OPT -->
+				<div class="card-body">
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4"> Account Verification</h5>
-                    <p class="text-center small">We have sent a 6-digit OTP to your email [yourmail@example.com], input it be to verify your account.</p>
+                    <p class="text-center small">We have sent a 6-digit OTP to your email (<?= $_SESSION['MM_Email']; ?>), input it below to verify your account.</p>
+					  <?php if($msg != "") { echo $msg; } ?>
                   </div>
 
                   <form method="post" class="row g-3 needs-validation" novalidate>
 
                     <div class="col-12">
-                      <label for="yourEmail" class="form-label"> Email</label>
+                      <label for="yourEmail" class="form-label"> OTP Code:</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                      	<input type="email" name="email" class="form-control" id="yourEmail" required>
-                      	<div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                      	<input type="number" name="otp" class="form-control" id="otp" value="<?= $otp; ?>" required>
+                      	<div class="invalid-feedback">Please enter a valid 6-DIGITS OTP that we have sent to you!</div>
 					  </div>
                     </div>
 					
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Verify</button>
+                      <button name="btnSubmit" class="btn btn-primary w-100" onClick="this.innerHTML='Please Wait...'" type="submit">Verify</button>
                     </div>
 					
                     <div class="col-12">
@@ -88,8 +137,9 @@
 					  </p>
                     </div>
                   </form>
-
                 </div>
+				  
+				  
               </div>
 
               <div class="credits">
