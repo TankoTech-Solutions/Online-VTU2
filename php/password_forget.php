@@ -31,6 +31,14 @@
   <!-- Template Main CSS File -->
   <link href="../assets/css/style.css" rel="stylesheet">
 
+  <style>
+	#show_form{
+		display: inline;		
+	  }
+	#show_note{
+		display: none;
+	  }
+  </style>
   <!-- =======================================================
   * Template Name: NiceAdmin
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -65,39 +73,44 @@
                     <p class="text-center small">Enter your registered email below to initiate the password reset process.</p>
                   </div>
 				  
-				  <?php if(isset($_POST['initiate'])) { ?>
-				  
+				  <?php //if(isset($_POST['initiate'])) { ?>
+				  <span id="show_note">
+					  
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
 						<h4 class="alert-heading">Initiated</h4>
 						<p>We have sent you an email with the Password Reset link, follow the link and reset your password.</p>
 						<hr>
 						   <p class="mb-0">If you did not find the email after some time, please re-initiate the password reset process <a href="password_forget.php">Here</a></p>
 						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-					  </div>				  
-                  
-				  <?php }else{ ?>
-				               
+					  </div>
+					  
+				  </span>
+				  <?php //}else{ ?>
+				  <span id="show_form"> 
+						
+					<p class="text-center small" id="noted"></p>  
 					<form method="post" class="row g-3 needs-validation" novalidate>
                     
 					  <div class="col-12">
-                      <label for="yourEmail" class="form-label"> Email</label>
+                      <label for="email" class="form-label"> Email</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                      	<input type="email" name="email" class="form-control" id="yourEmail" required>
+                      	<input type="email" name="email" class="form-control" id="email" required>
                       	<div class="invalid-feedback">Please enter a valid Email adddress!</div>
 					  </div>
                     </div>
                     
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" name="initiate" type="submit">Initiate</button>
+                      <button class="btn btn-primary w-100" onClick="resetPassword()" name="initiate" id="btn_submit" type="submit">Initiate</button>
                     </div>
 					  
                     <div class="col-12">
                       <p class="small mb-0">Already have an account? <a href="login.php">Login</a></p>
                     </div>
                   </form>
-
-				  <?php } ?>
+					  
+				  </span>
+				  <?php //} ?>
 					
                 </div>
 			</div>
@@ -107,7 +120,7 @@
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
               </div>
 
             </div>
@@ -133,7 +146,38 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+  <script>
+	  
+	  function resetPassword(){
+		  
+		var thismail 	= document.getElementById("email").value;
+		var showform	= document.getElementById("show_form");
+		var shownote	= document.getElementById("show_note");
+		var btnSub		= document.getElementById("btn_submit");
 
+		btnSub.innerHTML = 'Please Wait...';
+		//alert(thismail);
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				let response= this.responseText;
+				const obj 	= JSON.parse(response);
+				
+				//alert(obj["note"]);
+				if (obj["success"] == 1) {
+					showform.style.display='none';	
+					shownote.style.display='inline';
+				}
+				document.getElementById("noted").innerHTML = obj["note"];
+				btnSub.innerHTML = 'Initiate';
+		   }
+		};
+    xhttp.open("GET", "script_reset_password.php?mail="+thismail, true);
+    xhttp.send();
+	
+}
+</script>
 </body>
 
 </html>

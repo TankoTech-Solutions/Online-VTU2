@@ -1,5 +1,7 @@
 <?php require_once('../includes/_conn.php'); ?>
 <?php
+
+if(isset($_SESSION['MM_ID'])) {
 $msg	= "";
 $otp	= "";
 $email	= $_SESSION['MM_Email'];
@@ -14,11 +16,11 @@ if (isset($_POST['btnSubmit'])) {
 	elseif(!is_numeric($otp)){
 	 	$noted = tt_alert(' OTP code must be numeric only!', 0); 
 	}
-	elseif(strlen($phone) < 6 || strlen($phone) > 6){
+	elseif(strlen($otp) < 6 || strlen($otp) > 6){
 	 	$noted = tt_alert(' OTP code must be 6-digits number! Please check.', 0); 
 	}else{
 	
-		$query = mysqli_query($conn, "SELECT * FROM otp WHERE otp='".md5($user_id)."' AND
+		$query = mysqli_query($conn, "SELECT * FROM otp WHERE otp='".md5($otp)."' AND
   								user_id='".$user_id."' AND status='0'") or die(mysqli_error($conn));
 	
 	  $count = mysqli_num_rows($query);
@@ -45,8 +47,11 @@ if (isset($_POST['btnSubmit'])) {
 	  }
 	}
 }
+}else{
+	//Page not initiated properly.
+	header("location: login.php");
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -111,8 +116,10 @@ if (isset($_POST['btnSubmit'])) {
 				<div class="card-body">
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4"> Account Verification</h5>
-                    <p class="text-center small">We have sent a 6-digit OTP to your email (<?= $_SESSION['MM_Email']; ?>), input it below to verify your account.</p>
-					  <?php if($msg != "") { echo $msg; } ?>
+                    <p class="text-center small" id="noted">
+						We have sent a 6-digit OTP to your email (<?= $_SESSION['MM_Email']; ?>), input it below to verify your account.
+					 </p>	
+					 <?php if($noted != "") { echo $noted; } ?>
                   </div>
 
                   <form method="post" class="row g-3 needs-validation" novalidate>
@@ -127,13 +134,15 @@ if (isset($_POST['btnSubmit'])) {
                     </div>
 					
                     <div class="col-12">
-                      <button name="btnSubmit" class="btn btn-primary w-100" onClick="this.innerHTML='Please Wait...'" type="submit">Verify</button>
+                      <button name="btnSubmit" class="btn btn-primary w-100" id="btn_submit" type="submit">Verify</button>
                     </div>
 					
                     <div class="col-12">
                       <p class="small mb-0">Don't received the  OTP? 
 						  <a id="countdown" href="#">Wait 90 seconds</a>
-						  <a id="resend" href="#">Resend</a>
+						  <a id="resend" class="btn btn-default" href="#" onClick="resendOtp()">Resend</a>
+						  <input type="hidden" name="email" id="email" value="<?= $_SESSION["MM_Email"]; ?>" required>
+                      	
 					  </p>
                     </div>
                   </form>
@@ -147,7 +156,7 @@ if (isset($_POST['btnSubmit'])) {
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
               </div>
 
             </div>
@@ -172,8 +181,64 @@ if (isset($_POST['btnSubmit'])) {
   <script src="../assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+<script src="../assets/js/main.js"></script>
+	
+<!-- Display the countdown timer in an element -->
+<script>
+var countDown	= document.getElementById("countdown");
+var resend		= document.getElementById("resend");
+var countDownDate = new Date().getTime() + (60 * 9000); //Now plus 90 second.
 
+countdown.style.display='inline';	
+resend.style.display='none';	
+	
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+  var seconds = Math.floor((distance % (1500 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  countDown.innerHTML = seconds + " seconds";
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+	countdown.style.display='none';	
+	resend.style.display='inline';	
+  }
+}, 1000);
+	
+//--	Resend OTP ajax.
+function resendOtp(){
+	var thismail 	= document.getElementById("email").value;
+	var countDown	= document.getElementById("countdown");
+	var resend		= document.getElementById("resend");
+	var btnSub		= document.getElementById("btn_submit");
+
+	countdown.style.display='inline';	
+	resend.style.display='none';	
+	btnSub.innerHTML = 'Please Wait...';
+	//alert(thismail);
+	
+	var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+			countdown.style.display='none';	
+			resend.style.display='inline';	
+            document.getElementById("noted").innerHTML = this.responseText;
+			btnSub.innerHTML = 'Verify';
+       }
+    };
+    xhttp.open("GET", "script_resend_otp.php?mail="+thismail, true);
+    xhttp.send();
+	
+}
+</script>
 </body>
 
 </html>

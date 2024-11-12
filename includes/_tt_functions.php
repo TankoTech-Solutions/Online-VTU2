@@ -132,14 +132,20 @@ function tt_alert_box($str, $flag)
 }
 
 //Get single value
-function get_value($conn, $table, $field, $wField, $wValue) {	
-	$sql 	= mysqli_query($conn, "SELECT ".$field." FROM ".$table." WHERE ".$wField." = '".$wValue."'");
+function get_value($conn, $table, $field, $wField, $wValue) {
+	$sql = "SELECT " . $field . " FROM " . $table . " WHERE " . $wField . " = '" . $wValue . "'";
+	$result = $conn->query($sql);
 
-	if(mysqli_num_rows($sql) > 0){
-		$row 	= mysqli_fetch_assoc($sql);
+	// Check if the query was successful
+	if ($result && $result->num_rows > 0) {
+		// Fetch and return the data
+		$row = $result->fetch_assoc();
 		return $row[$field];
-	}	
-	return "";
+	} elseif (!$result) {
+		// Log or display error if query fails
+		error_log("SQL Error: " . $conn->error);
+	}
+	return ""; // Return empty string if no rows are found or on error
 }
 
 //Check if their is banning?
@@ -279,17 +285,9 @@ function tt_random_string($count)
 //Generate random number (OTP)
 function tt_random_number($count) 
 {
-	$chars = "0123456789";
-	srand((double)microtime()*1000000);
-	$i = 0;
-	$otp = '' ;
-	while ($i <= $count) {
-		$num 	= rand() % 33;
-		$tmp 	= substr($chars, $num, 1);
-		$otp  .= $tmp;
-		$i++;
-	}
-	return $otp;
+	$key = random_int(0, 999999); 
+	$key = str_pad($key, $count, 0, STR_PAD_LEFT); 
+	return $key;
 }
 
 //Upload picture file to the server.

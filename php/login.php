@@ -4,6 +4,9 @@ $msg		= "";
 $cook_user	= "";
 $cook_pass	= "";
 
+session_destroy();
+$_SERVER['HTTP_REFERER'] = NULL;
+
 //Set/Unset remember me cookie
 //if(isset($_POST["remember"])){
 //	if(!isset($_COOKIE["cookie_user"])) {
@@ -148,6 +151,7 @@ if (isset($_POST['btnSubmit'])) {
                     </div>
                     <div class="col-12">
                       <p class="small mb-0">Don't have account? <a href="register.php">Create an account</a></p>
+                      <p class="small mb-0">Forget your password? <a href="password_forget.php">Reset it here</a></p>
                     </div>
                   </form>
 
@@ -158,8 +162,8 @@ if (isset($_POST['btnSubmit'])) {
                 <!-- All the links in the footer should remain intact. -->
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->				  
+				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
               </div>
 
             </div>
