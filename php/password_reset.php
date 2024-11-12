@@ -30,14 +30,6 @@
 
   <!-- Template Main CSS File -->
   <link href="../assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -51,7 +43,7 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="../index.html" class="logo d-flex align-items-center w-auto">
+                <a href="index.php" class="logo d-flex align-items-center w-auto">
                   <img src="../assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block"><?= strtoupper($app_title); ?></span>
                 </a>
@@ -105,13 +97,14 @@
 			</div>
 
               <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
-				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
+				  <div class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+					</div>
+					<p align="center">
+					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					</p>
               </div>
+
 
             </div>
           </div>

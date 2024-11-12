@@ -1,11 +1,13 @@
 <?php require_once('../includes/_conn.php'); ?>
 <?php
+// *** Validate request to login to this site.
+if (!isset($_SESSION)) {
+  session_start();
+}
+
 $msg		= "";
 $cook_user	= "";
 $cook_pass	= "";
-
-session_destroy();
-$_SERVER['HTTP_REFERER'] = NULL;
 
 //Set/Unset remember me cookie
 //if(isset($_POST["remember"])){
@@ -24,32 +26,38 @@ $_SERVER['HTTP_REFERER'] = NULL;
 //}
   
 if (isset($_POST['btnSubmit'])) { 
-  $email	= tt_sensatize_input($conn, $_POST['username']);
+  $email	= tt_sensatize_input($conn, $_POST['email']);
   $password	= tt_sensatize_input($conn, $_POST['password']);
   $remember	= isset($_POST['remember']) ? "Yes" : "No";
  
-  $LoginRS = mysqli_query($conn, "SELECT * FROM user WHERE email='".$email."' AND password='".md5($password)."'") or die(mysqli_error($conn));
-  $loginFoundUser = mysqli_num_rows($LoginRS);
-  if ($loginFoundUser == 1) { echo "User found!";
+  $LoginRS = mysqli_query($conn, "SELECT * FROM user WHERE email='".$email."' AND password='".md5($password)."'") 
+	or die(mysqli_error($conn));
+  	$loginFoundUser = mysqli_num_rows($LoginRS);
+	
+  if ($loginFoundUser == 1) { //echo "User found!";
     	extract(mysqli_fetch_array($LoginRS));
-		if($status == "1") {							 
+		
+		if($status == 0) {		
+			//Unverify account
+			header("Location: verification.php");				 
+			
+		}else{
 			//declare session variables and assign them
 			$_SESSION['MM_ID']	 		= $user_id;
 			$_SESSION['MM_Email']	 	= $email;
 			$_SESSION['MM_Fullname']	= $fullname;
 							 
 			//Success redirection
-			header("Location: index.php");	
-		}else{
-			//Unverify account
-			header("Location: verification.php");
-		}
+			$msg = tt_alert(" Login Successfully.", 1);		
+			header("Location: index.php");
+		}						 
+   				 
   }elseif($loginFoundUser > 1) {
   	//Failed redirection
-	$msg = "<i class='fa fa-exclamation-circle'></i> OMG! There is user complict in the system, please contect us.";
+	$msg = tt_alert(" OMG! There is a user complict in the system, please contect us.", 0);
   } else {
   	//Failed redirection
-	$msg = "<i class='fa fa-exclamation-circle'></i> Ops! Invalid Email and/or Password. Please double check and try again.";
+	$msg = tt_alert(" Ops! Invalid Email and/or Password. Please double check and try again.", 0);
   }
 }
 ?>
@@ -84,14 +92,6 @@ if (isset($_POST['btnSubmit'])) {
 
   <!-- Template Main CSS File -->
   <link href="../assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -105,53 +105,52 @@ if (isset($_POST['btnSubmit'])) {
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="../index.html" class="logo d-flex align-items-center w-auto">
+                <a href="index.php" class="logo d-flex align-items-center w-auto">
                   <img src="../assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block"><?= strtoupper($app_title); ?></span>
                 </a>
               </div><!-- End Logo -->
 
               <div class="card mb-3">
-
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4"> Account Login</h5>
                     <p class="text-center small">Enter your  email & password to login</p>
-					<?php if($msg != "") { echo
-						'<p class="alert alert-danger">'.$msg; 
-					} ?>
+					<?php if($msg != "") { echo $msg; } ?>
                   </div>
 
-                  <form method="post" class="row g-3 needs-validation" novalidate>
+                  <form method="post" action="<?= $_SERVER['PHP_SELF']; ?>" class="row g-3 needs-validation" novalidate>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label"> Email</label>
+                      <label for="email" class="form-label"> Email</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please enter your username.</div>
+                        <input type="email" name="email" class="form-control" id="email" required>
+                        <div class="invalid-feedback">Please enter your valid email.</div>
                       </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
+                      <div class="invalid-feedback">Enter your password!</div>
                     </div>
 
                     <div class="col-12">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                        <input class="form-check-input" type="checkbox" name="remember" value="true" id="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
                       </div>
                     </div>
                     <div class="col-12">
                       <button name="btnSubmit" class="btn btn-primary w-100" type="submit">Login</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Don't have account? <a href="register.php">Create an account</a></p>
-                      <p class="small mb-0">Forget your password? <a href="password_forget.php">Reset it here</a></p>
+                      <p class="small mb-0">Don't have account? 
+						  <a class="link link-default" href="register.php">Create an account</a></p>
+                      <p class="small mb-0">Forget your password? 
+						  <a class="link link-default" href="password_forget.php">Reset it here</a></p>
                     </div>
                   </form>
 
@@ -159,11 +158,12 @@ if (isset($_POST['btnSubmit'])) {
               </div>
 
               <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->				  
-				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
+				  <div class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+					</div>
+					<p align="center">
+					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					</p>
               </div>
 
             </div>

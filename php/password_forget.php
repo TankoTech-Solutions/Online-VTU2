@@ -1,5 +1,74 @@
 <?php require_once('../includes/_conn.php'); ?>
+<?php
 
+	$offset		= 0;
+	$email 		= "";
+	$user_id 	= "";
+	$noted		= "";
+		
+if (isset($_POST["btnSubmit"])) { 
+	
+	$email 		= tt_sensatize_input($conn, strtolower($_POST["email"]));
+	$check_user	= get_value($conn, "user", "user_id", "email", $email);	
+	$user_id 	= get_value($conn, "user", "user_id", "email", $email);
+	$check_otp	= get_value($conn, "otp", "status", "email", $email);	
+	
+	if($email=='' || empty($email)){
+	 	$noted = tt_alert(" Email address is required!", 0);
+	}
+	elseif($user_id == ""){
+	 	$noted = tt_alert(" Your account is not recognized!, you may register again please.", 0);
+	}
+	elseif($check_user != ""){
+		
+		if($check_otp == 0) {
+			
+			//Delete existing otp
+			$sql_delete = "DELETE FROM otp WHERE user_id = ".$user_id."";
+				
+			
+			if($conn->query($sql_delete) === TRUE) {
+				
+				$add_date	= date("Y/m/d H:i A");
+				$otp_code	= tt_random_number(6);				
+				$fullname	= get_value($conn, "user", "fullname", "user_id", $user_id);	
+				
+				//Insert and send the otp.
+				$sql_otp = "INSERT INTO otp (user_id, otp, purpose, sent_via, date_time, status)
+				VALUES ('".$user_id."', '".md5($otp_code)."',	'Password Reset', 'E-Mail', '".$add_date."', '0')";
+				
+				if($conn->query($sql_otp) === TRUE) {
+			
+					//--- Create verification OTP and send it to email.
+					include("../mails/mail_reset.php");
+					$err_mail = do_send_mail_01($app_email, $email, $subject, $content);
+
+					if($err_mail == "") {
+
+						//--- Refer dashboard page.			
+						$_SESSION['MM_ID']	 	= $user_id;			
+						$_SESSION['MM_Email']	= $email;	
+						
+	 					$noted = tt_alert(" A 6-digits OTP has been resend to your email (".$email."), use it to verify your account please.", 1);
+						$offset = 1;
+					}else{ 
+	 					$noted = $err_mail; //Show failed email error (Already formatted with tt_alert)
+					}
+				}else{
+	 				$noted = tt_alert(" Failed to generate new and resend the OTP! ".$conn->error, 0);
+				}
+			}else{
+	 			$noted = tt_alert(" Error process resending OTP! please try again.", 0);
+			}
+		}else{
+	 	$noted = tt_alert(" Error resending OTP! Old OTP not found.", 0);
+		}
+	}else{
+	 	$noted = tt_alert(" Error resending OTP! Customer not found.", 0);
+	} 
+}//end if form submit
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,13 +108,6 @@
 		display: none;
 	  }
   </style>
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -59,7 +121,7 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="../index.html" class="logo d-flex align-items-center w-auto">
+                <a href="index.php" class="logo d-flex align-items-center w-auto">
                   <img src="../assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block"><?= strtoupper($app_title); ?></span>
                 </a>
@@ -73,7 +135,7 @@
                     <p class="text-center small">Enter your registered email below to initiate the password reset process.</p>
                   </div>
 				  
-				  <?php //if(isset($_POST['initiate'])) { ?>
+				  <?php if($offset == 1) { ?>
 				  <span id="show_note">
 					  
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -85,10 +147,10 @@
 					  </div>
 					  
 				  </span>
-				  <?php //}else{ ?>
+				  <?php }else{ ?>
 				  <span id="show_form"> 
 						
-					<p class="text-center small" id="noted"></p>  
+					<?php if($noted != "") { echo $noted; } ?>  
 					<form method="post" class="row g-3 needs-validation" novalidate>
                     
 					  <div class="col-12">
@@ -101,7 +163,7 @@
                     </div>
                     
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" onClick="resetPassword()" name="initiate" id="btn_submit" type="submit">Initiate</button>
+                      <button class="btn btn-primary w-100" name="btnSubmit" id="btn_submit" type="submit">Initiate</button>
                     </div>
 					  
                     <div class="col-12">
@@ -110,18 +172,20 @@
                   </form>
 					  
 				  </span>
-				  <?php //} ?>
+				  <?php } ?>
 					
                 </div>
 			</div>
 
               <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-				  Designed by <a target="_blank" href="<?= $app_dev_website; ?>"><?= $app_dev_name; ?></a>
+				  <div class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+					</div>
+					<p align="center">
+					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					</p>
               </div>
+
 
             </div>
           </div>
@@ -146,8 +210,7 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
-  <script>
-	  
+  <script>	  
 	  function resetPassword(){
 		  
 		var thismail 	= document.getElementById("email").value;
@@ -158,24 +221,24 @@
 		btnSub.innerHTML = 'Please Wait...';
 		//alert(thismail);
 
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				let response= this.responseText;
-				const obj 	= JSON.parse(response);
-				
-				//alert(obj["note"]);
-				if (obj["success"] == 1) {
-					showform.style.display='none';	
-					shownote.style.display='inline';
-				}
-				document.getElementById("noted").innerHTML = obj["note"];
-				btnSub.innerHTML = 'Initiate';
-		   }
-		};
-    xhttp.open("GET", "script_reset_password.php?mail="+thismail, true);
-    xhttp.send();
-	
+//		var xhttp = new XMLHttpRequest();
+//		xhttp.onreadystatechange = function() {
+//			if (this.readyState == 4 && this.status == 200) {
+//				let response= this.responseText;
+//				const obj 	= JSON.parse(response);
+//				
+//				alert(response);
+//				if (obj["success"] == 1) {
+//					showform.style.display='none';	
+//					shownote.style.display='inline';
+//				}
+//				document.getElementById("noted").innerHTML = obj["note"];
+//				btnSub.innerHTML = 'Initiate';
+//		   }
+//		};
+//    xhttp.open("GET", "script_reset_password.php?mail="+thismail, true);
+//    xhttp.send();
+//	
 }
 </script>
 </body>

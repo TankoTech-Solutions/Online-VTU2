@@ -1,11 +1,7 @@
 <?php
 require('../includes/conn.php');
 
-  $sql = mysqli_query($conn, "SELECT * FROM  general order by id desc LIMIT 1");
-            if(mysqli_num_rows($sql) > 0){
-              $web = mysqli_fetch_assoc($sql);
-            }
- $request_dir = $_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']);	
+$request_dir = $_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']);	
 $temp='
 <html>
 <head>

@@ -9,6 +9,7 @@ if (isset($_GET["mail"])) {
 	
 	$email 		= tt_sensatize_input($conn, strtolower($_GET["mail"]));
 	$user_id 	= get_value($conn, "user", "user_id", "email", $email);
+	//echo '<script>alert('.$user_id.');</script>';
 	
 	if($email=='' || empty($email)){
 	 	$noted['success'] = 0;
@@ -33,12 +34,12 @@ if (isset($_GET["mail"])) {
 		
 				//Insert and send the otp.
 				$sql_otp = "INSERT INTO otp (user_id, otp, purpose, sent_via, date_time, status)
-				VALUES ('".$user_id."', '".md5($otp_code)."',	'New Registration', 'E-Mail', '".$add_date."', '0')";
+				VALUES ('".$user_id."', '".md5($otp_code)."',	'Password Reset', 'E-Mail', '".$add_date."', '0')";
 				
 				if($conn->query($sql_otp) === TRUE) {
 			
 					//--- Create verification OTP and send it to email.
-					include("../mails/mail_otp.php");
+					include("../mails/mail_reset.php");
 					$err_mail = do_send_mail($app_email, $email, $subject, $content);
 
 					if($err_mail == "") {

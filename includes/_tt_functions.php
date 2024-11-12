@@ -285,7 +285,7 @@ function tt_random_string($count)
 //Generate random number (OTP)
 function tt_random_number($count) 
 {
-	$key = random_int(0, 999999); 
+	$key = mt_rand(0, 999999); 
 	$key = str_pad($key, $count, 0, STR_PAD_LEFT); 
 	return $key;
 }
