@@ -2,7 +2,6 @@
 <?php
 $noted = "";
 
-if(isset($_SESSION['MM_ID'])) {
 $msg	= "";
 $otp	= "";
 $email	= $_SESSION['MM_Email'];
@@ -29,7 +28,7 @@ if (isset($_POST['btnSubmit'])) {
 			extract(mysqli_fetch_array($query));
 
 			mysqli_query($conn, "UPDATE user SET status = '1' WHERE user_id = $user_id");
-			mysqli_query($conn, "UPDATE otp SET status = '1' WHERE user_id = $user_id");
+			mysqli_query($conn, "UPDATE otp SET status = '1' WHERE user_id = ".$user_id." AND otp = ".md5($otp));
 
 				//--- Auto login
 				$_SESSION['MM_ID']	 		= $user_id;
@@ -48,10 +47,7 @@ if (isset($_POST['btnSubmit'])) {
 	  }
 	}
 }
-}else{
-	//Page not initiated properly.
-	header("location: login.php");
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -145,11 +141,11 @@ if (isset($_POST['btnSubmit'])) {
               </div>
 
               <div class="credits">
-				  <div class="copyright">
-					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+				  <div align="center" class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>.
 					</div>
 					<p align="center">
-					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					  Designed by <a href="<?= $app_dev_website; ?>" target="_blank"><?= $app_dev_name; ?></a>
 					</p>
               </div>
 

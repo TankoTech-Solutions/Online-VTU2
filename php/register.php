@@ -41,12 +41,19 @@ if (isset($_POST["btnSave"])) {
 		$noted = tt_alert(' This phone number is in use by another customer!', 0);  
 	}
 	
+	elseif($password=='' || empty($password)){
+	 	$noted = tt_alert(' A valid password is required!', 0); 
+	}
+	elseif(strlen($password) < 8) {
+			  $noted = tt_alert("Password length most be at least 8 characters!", 0);
+	}
+	
 	elseif(!isset($accept_term)){
 		$noted = tt_alert(' You need to accept our terms of service to register!', 0);  
 	
 	}else{     
 
-		$hash_pass 	= md5($password);
+  		$hash_pass	= substr(sha1(md5($password)), 3, 10);
 		$refer_code	= strtoupper(tt_get_initials($fullname).tt_random_string(6));
 		$add_date	= date("Y/m/d H:i A");
 		$user_ip	= getenv("REMOTE_ADDR");
@@ -188,7 +195,10 @@ if (isset($_POST["btnSave"])) {
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" value="<?= $password; ?>" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
+						<small id="newpassword" class="form-text text-muted">
+							Min length = 8, Alphanumeric Characters [i.e abcd1234]
+					  	</small>						
+                      	<div class="invalid-feedback">Please enter a valid password!</div>
                     </div>
 
                     <div class="col-12">
@@ -210,14 +220,13 @@ if (isset($_POST["btnSave"])) {
               </div>
 
               <div class="credits">
-				  <div class="copyright">
-					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+				  <div align="center" class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>.
 					</div>
 					<p align="center">
-					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					  Designed by <a href="<?= $app_dev_website; ?>" target="_blank"><?= $app_dev_name; ?></a>
 					</p>
               </div>
-
 
             </div>
           </div>

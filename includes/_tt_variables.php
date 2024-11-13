@@ -10,15 +10,6 @@
 	define('SRV_ROOT', $srvRoot); */
 	
 /* Application Constants */	
-	define("APP_TITLE", 		"HISPEEDKYW");
-	define("APP_COMPANY", 		"TankoTech Solutions");
-	define("APP_TOWN",			"Kiyawa"); //Unused
-	define("APP_STATE",			"Jigawa");
-	define("APP_MAIL_BOX",		"P.M.B. 104"); //Unused
-	define("APP_LOGO",			"flash/banner.swf"); //Unused
-	define("APP_HOST_URL",		"https://hispeedkyw.com.ng/");
-	define("APP_HOST_IP",		"192.168.1.1"); //Unused
-	define("APP_MAIL_SUPPORT",	"support@tankotech.com.ng");	
 	define("APP_MAIL_NOREPLY",	"noreply@tankotech.com.ng");	
 	define("APP_PHONE", 		"+2349060202084");
 	define("APP_ADDRESS", 		"1st Floor TankoTech Building, Kiyawa");
@@ -38,6 +29,8 @@
 /* Mail Constants */
 	define("MAIL_USER",			"tankote5");
 	define("MAIL_PASS",			"w2E;32-TElub6T");
+	define("MAIL_HOST",			"tankotech.com.ng");
+	define("MAIL_POST",			"587");
 	
 /* MONNIFY APIS */
 	define("MoAPI",				"MK_TEST_WN9FQE2E5X",	true); 				//API Code
@@ -86,13 +79,9 @@
 	$clear_amount		= 10000;	//Ten Thausand
 	
 //Directory Variables Declaration
-	$site_root		= $HTTP.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);
-	$img_upload 	= "images/Upload/";
-	$img_img 		= "images/";
-	$img_news 		= "images/News/";
-	$img_dept 		= "images/Dept/";
-	$img_gallery	= "images/Gallery/";
-	$img_admins		= "upload/";
+	$site_root		= $HTTP.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI'])."/";
+	$img_upload 	= "assets/upload/";
+	$img_img 		= "assets/img/";
 	
 //Files Variables Declaration 
 	$img_admin_passpot	= $img_img."admin_passport.jpg";

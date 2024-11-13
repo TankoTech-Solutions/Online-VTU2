@@ -407,14 +407,14 @@ function tt_str_trim($str, $count, $url) {
 				return $str;
 			}
 }
- 
-//function to send email
+
+//function to send email 
 function do_send_mail($from, $to, $subj, $msg) {
 	include('Mail.php'); // includes the PEAR Mail class, already on your server.
 	
 	//The email headers	
 	$cont_type	= "text/html; charset=UTF-8\r\n";
-	$headers 	= array ('From' => $from, 'To' => $to, 'Subject' => $subj, "Content-Type" => $cont_type); 
+	$headers 	= array ('From' => $app_name.' <'.$from.'>', 'To' => $to, 'Subject' => $subj, "Content-Type" => $cont_type); 
 	
 	// SMTP protocol with the username and password of an existing email account in your hosting account
 	$smtp = Mail::factory('smtp', array ('host'=>'localhost', 'auth'=>true, 'username'=>MAIL_USER, 'password'=>MAIL_PASS, 'port'=>'25'));
@@ -430,14 +430,64 @@ function do_send_mail($from, $to, $subj, $msg) {
 	}
 }
 
-//function to send email
-function do_send_mail_01($from, $to, $subj, $msg) {
-	$header 	= "From: ".$from."\r\n";
-	$header 	.= "MIME-Version: 1.0\r\n";
-	$header 	.= "Content-type: text/html\r\n";
-	$do_send 	= mail($to, "Subject: ".$subj, wordwrap($msg), $header);
+//function to send email 01
+function do_send_mail_01($title, $from, $to, $subj, $msg) {
+					
+	@require_once("../mail/phpmailer/PHPMailerAutoload.php");
+	 $mail = new PHPMailer();
+		$mail->CharSet = "UTF-8";
+		$mail->IsSMTP();
+		$mail->SMTPAuth = true;
+		$mail->SMTPSecure = "ssl";
+		$mail->Host = MAIL_HOST;
+		$mail->Port = MAIL_POST;              
+		$mail->Username = MAIL_USER;
+		$mail->Password = MAIL_PASS;
+		$mail->IsHTML(true);
+		$mail->setFrom("$from", "$title");
+		$mail->addAddress("$to");
+		$mail->isHTML(true);
+		$mail->Subject = "$subj";
+		$mail->Body = $msg;  
+					
+		if (!$mail->send()) {
+			//echo "<script> alert('error sending email mysqli_error($mail)');<//script>";
+			return "Error sending email : ".mysqli_error($mail);
+		} else {
+			// echo "<script> alert('Email sent');<//script>";
+		}
 }
-	///////////////FURTHER STUDY////////////
+
+//function to send email 02
+function do_send_mail_02($from, $to, $subj, $msg) {
+    // Email headers
+    $cont_type = "text/html; charset=UTF-8\r\n";
+    $headers = array(
+        'From' => $from,
+        'To' => $to,
+        'Subject' => $subj,
+        "Content-Type" => $cont_type
+    );
+
+    // SMTP configuration (adjust according to your email provider's requirements)
+    $smtp = Mail::factory('smtp', array(
+        'host' 		=> 'smtp.'.MAIL_HOST,    // Replace with your SMTP server
+        'auth' 		=> true,
+        'username' 	=> MAIL_USER,            // SMTP username
+        'password' 	=> MAIL_PASS,            // SMTP password
+        'port' 		=> MAIL_PORT             // Common SMTP port
+    ));
+
+    // Send the mail
+    $mail = $smtp->send($to, $headers, wordwrap($msg));
+
+    if (PEAR::isError($mail)) {
+        return tt_alert('Email error : ' . $mail->getMessage(), 0);
+    } else {
+        return tt_alert('Email sent successfully.', 1);
+    }
+}
+ 
 /* Create the paging links */
 function getPagingNav($conn, $sql, $pageNum, $rowsPerPage, $queryString = '')
 {

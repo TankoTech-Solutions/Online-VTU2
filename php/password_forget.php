@@ -11,13 +11,13 @@ if (isset($_POST["btnSubmit"])) {
 	$email 		= tt_sensatize_input($conn, strtolower($_POST["email"]));
 	$check_user	= get_value($conn, "user", "user_id", "email", $email);	
 	$user_id 	= get_value($conn, "user", "user_id", "email", $email);
-	$check_otp	= get_value($conn, "otp", "status", "email", $email);	
+	$check_otp	= get_value($conn, "otp", "status", "user_id", $user_id);	
 	
 	if($email=='' || empty($email)){
 	 	$noted = tt_alert(" Email address is required!", 0);
 	}
 	elseif($user_id == ""){
-	 	$noted = tt_alert(" Your account is not recognized!, you may register again please.", 0);
+	 	$noted = tt_alert(" Your account is not recognized! You may register again please.", 0);
 	}
 	elseif($check_user != ""){
 		
@@ -26,7 +26,6 @@ if (isset($_POST["btnSubmit"])) {
 			//Delete existing otp
 			$sql_delete = "DELETE FROM otp WHERE user_id = ".$user_id."";
 				
-			
 			if($conn->query($sql_delete) === TRUE) {
 				
 				$add_date	= date("Y/m/d H:i A");
@@ -41,16 +40,16 @@ if (isset($_POST["btnSubmit"])) {
 			
 					//--- Create verification OTP and send it to email.
 					include("../mails/mail_reset.php");
-					$err_mail = do_send_mail_01($app_email, $email, $subject, $content);
+					$err_mail = do_send_mail($app_email, $email, $subject, $content);
 
 					if($err_mail == "") {
+						$offset = 1;
 
 						//--- Refer dashboard page.			
 						$_SESSION['MM_ID']	 	= $user_id;			
 						$_SESSION['MM_Email']	= $email;	
 						
 	 					$noted = tt_alert(" A 6-digits OTP has been resend to your email (".$email."), use it to verify your account please.", 1);
-						$offset = 1;
 					}else{ 
 	 					$noted = $err_mail; //Show failed email error (Already formatted with tt_alert)
 					}
@@ -100,6 +99,7 @@ if (isset($_POST["btnSubmit"])) {
   <!-- Template Main CSS File -->
   <link href="../assets/css/style.css" rel="stylesheet">
 
+<!--
   <style>
 	#show_form{
 		display: inline;		
@@ -108,6 +108,7 @@ if (isset($_POST["btnSubmit"])) {
 		display: none;
 	  }
   </style>
+-->
 </head>
 
 <body>
@@ -135,8 +136,8 @@ if (isset($_POST["btnSubmit"])) {
                     <p class="text-center small">Enter your registered email below to initiate the password reset process.</p>
                   </div>
 				  
-				  <?php if($offset == 1) { ?>
-				  <span id="show_note">
+				  <?php if($offset == 1) {
+				  echo '<span id="show_note">
 					  
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
 						<h4 class="alert-heading">Initiated</h4>
@@ -146,12 +147,12 @@ if (isset($_POST["btnSubmit"])) {
 						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					  </div>
 					  
-				  </span>
-				  <?php }else{ ?>
-				  <span id="show_form"> 
+				  </span>';
+				   }else{ 
+				  echo '<span id="show_form">';
 						
-					<?php if($noted != "") { echo $noted; } ?>  
-					<form method="post" class="row g-3 needs-validation" novalidate>
+					 if($noted != "") { echo $noted; }  
+				  echo	'<form method="post" class="row g-3 needs-validation" novalidate>
                     
 					  <div class="col-12">
                       <label for="email" class="form-label"> Email</label>
@@ -171,18 +172,18 @@ if (isset($_POST["btnSubmit"])) {
                     </div>
                   </form>
 					  
-				  </span>
-				  <?php } ?>
+				  </span>';
+				   } ?>
 					
                 </div>
 			</div>
-
+				
               <div class="credits">
-				  <div class="copyright">
-					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+				  <div align="center" class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>.
 					</div>
 					<p align="center">
-					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					  Designed by <a href="<?= $app_dev_website; ?>" target="_blank"><?= $app_dev_name; ?></a>
 					</p>
               </div>
 

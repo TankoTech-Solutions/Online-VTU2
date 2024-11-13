@@ -28,9 +28,10 @@ $cook_pass	= "";
 if (isset($_POST['btnSubmit'])) { 
   $email	= tt_sensatize_input($conn, $_POST['email']);
   $password	= tt_sensatize_input($conn, $_POST['password']);
+  $hash_pass= substr(sha1(md5($password)), 3, 10);
   $remember	= isset($_POST['remember']) ? "Yes" : "No";
- 
-  $LoginRS = mysqli_query($conn, "SELECT * FROM user WHERE email='".$email."' AND password='".md5($password)."'") 
+	 
+  $LoginRS = mysqli_query($conn, "SELECT * FROM user WHERE email='".$email."' AND password='".$hash_pass."'") 
 	or die(mysqli_error($conn));
   	$loginFoundUser = mysqli_num_rows($LoginRS);
 	
@@ -126,7 +127,7 @@ if (isset($_POST['btnSubmit'])) {
                       <label for="email" class="form-label"> Email</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="email" name="email" class="form-control" id="email" required>
+                        <input type="email" name="email" class="form-control" id="email" value="<?php if (isset($email)) echo $email; ?>" required>
                         <div class="invalid-feedback">Please enter your valid email.</div>
                       </div>
                     </div>
@@ -134,7 +135,10 @@ if (isset($_POST['btnSubmit'])) {
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Enter your password!</div>
+						<small id="newpassword" class="form-text text-muted">
+							Min length = 8, Alphanumeric Characters [i.e abcd1234]
+					  	</small>						
+                      	<div class="invalid-feedback">Please enter a valid password!</div>
                     </div>
 
                     <div class="col-12">
@@ -158,11 +162,11 @@ if (isset($_POST['btnSubmit'])) {
               </div>
 
               <div class="credits">
-				  <div class="copyright">
-					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>. All Rights Reserved
+				  <div align="center" class="copyright">
+					  Copyright &copy;<?= $app_copyright; ?> <strong><span><?= $app_title; ?></span></strong>.
 					</div>
 					<p align="center">
-					  Designed by <a href="<?= $app_dev_email; ?>"><?= $app_dev_name; ?></a>
+					  Designed by <a href="<?= $app_dev_website; ?>" target="_blank"><?= $app_dev_name; ?></a>
 					</p>
               </div>
 
